@@ -31,12 +31,12 @@ export const createPost = async (req, res) => {
 export const fetchPosts = async (req, res) => {
     try {
         const myPosts = await Post.find({ owner: req.user._id })
-            .populate("owner", "username email")
+            .populate("owner", "name email")
             .populate({
                 path: "comments",
                 populate: {
                     path: "owner",
-                    select: "username email",
+                    select: "name email",
                 },
             })
             .populate({
@@ -71,6 +71,65 @@ export const fetchPosts = async (req, res) => {
         });
     }
 };
+
+export const deletePost = async (req, res) => {
+    try {
+        const post = await Post.findById(req.params.postId);
+        if (!post) {
+            return res.status(404).json({
+                success: false,
+                message: "Post not found",
+            });
+        }
+        await Comment.deleteMany({ _id: { $in: post.comments } });
+        await Interaction.deleteMany({ _id: { $in: post.interactions } });
+        await User.updateOne(
+            { _id: req.user._id },
+            { $pull: { posts: post._id } }
+        );
+        await Post.deleteOne({ _id: post._id });
+        res.status(200).json({
+            success: true,
+            message: "Post deleted successfully",
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
+
+export const updatePost = async (req, res) => {
+    try {
+        const post = await Post.findById(req.params.postId);
+        if (!post) {
+            return res.status(404).json({
+                success: false,
+                message: "Post not found",
+            });
+        }
+        Object.keys(req.body).forEach((key) => {
+            post[key] = req.body[key];
+        });
+        await post.save();
+        res.status(200).json({
+            success: true,
+            message: "Post updated successfully",
+            data: {
+                post,
+            },
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
+
 
 export const createComment = async (req, res) => {
     try {
