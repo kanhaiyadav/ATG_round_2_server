@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import Comment from "./comment.model.js";
+import Interaction from "./iteraction.model.js";
 
 const postSchema = new mongoose.Schema({
     title: {
@@ -6,7 +8,7 @@ const postSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
-    body: {
+    content: {
         type: String,
         required: true,
         trim: true
@@ -22,18 +24,28 @@ const postSchema = new mongoose.Schema({
         required: true,
         ref: "User"
     },
-    likes: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Like"
-        }
-    ],
+    likes: {
+        type: Number,
+        default: 0
+    },
+    dislikes: {
+        type: Number,
+        default: 0
+    },
     comments: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Comment"
         }
+    ],
+    interactions: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Interaction"
+        }
     ]
+}, {
+    timestamps: true
 });
 
 

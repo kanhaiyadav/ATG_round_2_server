@@ -16,6 +16,8 @@ const commentSchema = new mongoose.Schema({
         required: true,
         ref: "Post"
     }
+}, {
+    timestamps: true
 });
 
 const Comment = mongoose.model("Comment", commentSchema);

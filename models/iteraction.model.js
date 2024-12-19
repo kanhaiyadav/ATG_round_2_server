@@ -1,6 +1,11 @@
 import mongoose from "mongoose";
 
-const dislikeSchema = new mongoose.Schema({
+const interactionSchema = new mongoose.Schema({
+    type: {
+        type: String,
+        required: true,
+        enum: ["like", "dislike"]
+    },
     post: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
@@ -13,6 +18,6 @@ const dislikeSchema = new mongoose.Schema({
     }
 });
 
-const Dislike = mongoose.model("Dislike", dislikeSchema);
+const Interaction = mongoose.model("Interaction", interactionSchema);
 
-export default Dislike;
+export default Interaction;

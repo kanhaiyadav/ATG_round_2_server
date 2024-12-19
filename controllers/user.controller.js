@@ -1,11 +1,11 @@
-import User from "../models/user.model";
+import User from "../models/user.model.js";
 import jwt from 'jsonwebtoken';
 
 export const signUp = async (req, res) => {
     try {
         const user = await User.findOne({ email: req.body.email });
         if (user) {
-            return res.status(400).send("User already exists");
+            return res.status(400).json({ message: "User already exists!" });
         }
         const newUser = new User(req.body);
         await newUser.save();
@@ -36,9 +36,9 @@ export const signIn = async (req, res) => {
                     }
                 });
             }
-            return res.status(400).send("Invalid credentials");
+            return res.status(400).json({message: "Invalid credentials"});
         } else {
-            return res.status(400).send("User not found");
+            return res.status(400).json({ message: "User not found" });
         }
     } catch (error) {
         console.log(error);
