@@ -9,6 +9,7 @@ const app = express();
 const allowedOrigins = [
     "http://localhost:5173",
     "https://atg-round-2.netlify.app",
+    "atg-round-2-client.vercel.app",
 ];
 const corsOptions = {
     origin: function (origin, callback) {
