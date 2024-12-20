@@ -87,7 +87,7 @@ export const verify = async (req, res) => {
                 return res.status(400).json({ message: "Invalid token" });
             } else {
                 forgotUser.varified = true;
-                res.redirect('http://localhost:5173/auth/reset-password');
+                res.redirect("https://atg-round-2.netlify.app/auth/reset-password");
             }
         });
     } catch {
